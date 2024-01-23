@@ -1,0 +1,18 @@
+#include <Stepper.h>
+
+const int stepsPerRevolution = 200;  // Nombre de pas par tour complet pour votre moteur
+Stepper myStepper(stepsPerRevolution, PIN1, PIN2, PIN3, PIN4);  // Remplacez PIN1, etc., par vos broches
+
+void setup() {
+  Serial.begin(9600);
+  myStepper.setSpeed(60);  // Réglez la vitesse du moteur
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    if (command == "rotate") {
+      myStepper.step(stepsPerRevolution / 200);  // Tourne de 1,8 degrés
+    }
+  }
+}
