@@ -1,0 +1,25 @@
+import serial
+import time
+import os
+
+# Configuration de la communication série avec l'Arduino
+arduino = serial.Serial('/dev/ttyACM0', 9600)  # Remplacer '/dev/ttyACM0' par le port série approprié
+time.sleep(2)  # Attendre la connexion série
+
+# Fonction pour envoyer une commande à l'Arduino
+def send_command_to_arduino(command):
+    arduino.write(f"{command}\n".encode())
+
+# Fonction pour prendre une photo avec la caméra connectée au Raspberry Pi
+def take_photo(photo_number):
+    os.system(f"raspistill -o photo_{photo_number}.jpg")  # Modifier la commande en fonction de votre configuration
+
+# Boucle principale
+for i in range(10):  # Exemple de 10 rotations/photos
+    send_command_to_arduino('rotate')  # Envoyer la commande de rotation à l'Arduino
+    time.sleep(5)  # Attendre que la rotation soit terminée (ajuster le temps si nécessaire)
+    take_photo(i)  # Prendre une photo après chaque rotation
+    time.sleep(2)  # Délai avant la prochaine rotation
+
+# Fermer la communication série
+arduino.close()
