@@ -1,0 +1,25 @@
+import serial
+import time
+import subprocess
+
+# Initialiser la communication série avec l'Arduino
+arduino = serial.Serial('/dev/ttyACM0', 9600)  # Remplacez par le port série correct
+time.sleep(2)  # Attendre que la connexion soit établie
+
+# Fonction pour faire tourner le moteur
+def rotate_motor():
+    arduino.write(b'rotate\n')  # Envoie la commande de rotation à l'Arduino
+    time.sleep(2)  # Temps d'attente pour la rotation
+
+# Fonction pour prendre une photo
+def take_photo(photo_number):
+    subprocess.run(["raspistill", "-o", f"image_{photo_number}.jpg"])
+    time.sleep(2)  # Délai pour sauvegarder l'image
+
+# Boucle principale
+for i in range(NOMBRE_DE_PHOTOS):  # Remplacez par le nombre de photos souhaité
+    rotate_motor()
+    take_photo(i)
+
+# Fermer la communication série
+arduino.close()
