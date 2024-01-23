@@ -1,0 +1,18 @@
+#include <Stepper.h>
+
+const int stepsPerRevolution = 200;  // Modifier en fonction de votre moteur
+Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Définir les pins connectés au driver du moteur
+
+void setup() {
+  Serial.begin(9600);
+  myStepper.setSpeed(60);  // Vitesse du moteur (RPM)
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    if (command == "rotate") {
+      myStepper.step(stepsPerRevolution / 200);  // Faire tourner le moteur de 1,8 degrés (pour un moteur 200 pas par tour)
+    }
+  }
+}
